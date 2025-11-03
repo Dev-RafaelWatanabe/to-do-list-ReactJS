@@ -1,0 +1,63 @@
+# Docker Compose para Desenvolvimento (com hot-reload)
+version: '3.8'
+
+services:
+  # Banco de dados PostgreSQL
+  postgres:
+    image: postgres:14-alpine
+    container_name: todolist-postgres-dev
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: todolist
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - todolist-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend NestJS (modo desenvolvimento)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: todolist-backend-dev
+    restart: always
+    environment:
+      # Database
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_DATABASE: todolist
+      # JWT
+      JWT_SECRET: minha_chave_secreta_super_segura_123
+      JWT_EXPIRATION: 7d
+      # App
+      PORT: 3000
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - todolist-network
+    command: npm run start:dev
+
+volumes:
+  postgres_dev_data:
+
+networks:
+  todolist-network:
+    driver: bridge
