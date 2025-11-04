@@ -30,10 +30,25 @@ export class TasksService {
     }
   }
 
-  async findAll(userId: string): Promise<Task[]> {
+  async findAll(userId: string, includeArchived = false): Promise<Task[]> {
+    const whereCondition: any = { userId };
+    
+    if (!includeArchived) {
+      whereCondition.isArchived = false;
+    }
+
     return await this.taskRepository.find({
-      where: { userId },
+      where: whereCondition,
       order: { createdAt: 'DESC' },
+      relations: ['category'],
+    });
+  }
+
+  async findArchived(userId: string): Promise<Task[]> {
+    return await this.taskRepository.find({
+      where: { userId, isArchived: true },
+      order: { completionDate: 'DESC' },
+      relations: ['category'],
     });
   }
 
@@ -62,11 +77,13 @@ export class TasksService {
     // Se a tarefa está sendo marcada como concluída e ainda não tem data de conclusão
     if (updateTaskDto.isCompleted && !task.isCompleted) {
       updateData.completionDate = new Date().toISOString();
+      updateData.isArchived = true; // Arquiva automaticamente quando completa
     }
 
     // Se a tarefa está sendo desmarcada como concluída, remove a data de conclusão
     if (updateTaskDto.isCompleted === false) {
       updateData.completionDate = null;
+      updateData.isArchived = false; // Desarquiva quando desmarca
     }
 
     // Converte null para undefined para compatibilidade com TypeORM
@@ -77,6 +94,18 @@ export class TasksService {
     });
 
     await this.taskRepository.update(id, updateData);
+    return this.findOne(id, userId);
+  }
+
+  async archive(id: string, userId: string): Promise<Task> {
+    const task = await this.findOne(id, userId);
+    await this.taskRepository.update(id, { isArchived: true });
+    return this.findOne(id, userId);
+  }
+
+  async unarchive(id: string, userId: string): Promise<Task> {
+    const task = await this.findOne(id, userId);
+    await this.taskRepository.update(id, { isArchived: false, isCompleted: false });
     return this.findOne(id, userId);
   }
 

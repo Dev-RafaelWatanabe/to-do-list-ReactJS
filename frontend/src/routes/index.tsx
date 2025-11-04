@@ -3,6 +3,8 @@ import { useAuth } from '../contexts/AuthContext';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
+import Categories from '../pages/Categories';
+import ArchivedTasks from '../pages/ArchivedTasks';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { token, isLoading } = useAuth();
@@ -62,6 +64,22 @@ export default function AppRoutes() {
         element={
           <PrivateRoute>
             <Dashboard />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/categories"
+        element={
+          <PrivateRoute>
+            <Categories />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/archived"
+        element={
+          <PrivateRoute>
+            <ArchivedTasks />
           </PrivateRoute>
         }
       />

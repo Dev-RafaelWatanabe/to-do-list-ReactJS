@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsDateString,
   IsBoolean,
+  IsUUID,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -43,4 +44,13 @@ export class CreateTaskDto {
   @IsOptional()
   @IsDateString({}, { message: 'A data planejada deve ser uma data válida' })
   plannedDate?: string;
+
+  @ApiProperty({
+    description: 'ID da categoria à qual a tarefa pertence',
+    example: '550e8400-e29b-41d4-a716-446655440000',
+    required: false,
+  })
+  @IsOptional()
+  @IsUUID('4', { message: 'O ID da categoria deve ser um UUID válido' })
+  categoryId?: string;
 }

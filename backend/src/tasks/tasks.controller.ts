@@ -33,11 +33,19 @@ export class TasksController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todas as tarefas do usuário' })
+  @ApiOperation({ summary: 'Listar todas as tarefas ativas do usuário (não arquivadas)' })
   @ApiResponse({ status: 200, description: 'Lista de tarefas' })
   @ApiResponse({ status: 401, description: 'Não autorizado' })
   findAll(@Request() req) {
-    return this.tasksService.findAll(req.user.userId);
+    return this.tasksService.findAll(req.user.userId, false);
+  }
+
+  @Get('archived')
+  @ApiOperation({ summary: 'Listar todas as tarefas arquivadas do usuário' })
+  @ApiResponse({ status: 200, description: 'Lista de tarefas arquivadas' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
+  findArchived(@Request() req) {
+    return this.tasksService.findArchived(req.user.userId);
   }
 
   @Get('metrics')
@@ -46,6 +54,24 @@ export class TasksController {
   @ApiResponse({ status: 401, description: 'Não autorizado' })
   getMetrics(@Request() req) {
     return this.tasksService.getTaskMetrics(req.user.userId);
+  }
+
+  @Patch(':id/archive')
+  @ApiOperation({ summary: 'Arquivar uma tarefa' })
+  @ApiResponse({ status: 200, description: 'Tarefa arquivada com sucesso' })
+  @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
+  archive(@Param('id') id: string, @Request() req) {
+    return this.tasksService.archive(id, req.user.userId);
+  }
+
+  @Patch(':id/unarchive')
+  @ApiOperation({ summary: 'Desarquivar uma tarefa' })
+  @ApiResponse({ status: 200, description: 'Tarefa desarquivada com sucesso' })
+  @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
+  unarchive(@Param('id') id: string, @Request() req) {
+    return this.tasksService.unarchive(id, req.user.userId);
   }
 
   @Get(':id')

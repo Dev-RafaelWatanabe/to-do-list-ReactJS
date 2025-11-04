@@ -46,15 +46,61 @@ export const authService = {
   },
 };
 
+// Interfaces de Categoria
+export interface Category {
+  id: string;
+  name: string;
+  description?: string;
+  color?: string;
+  userId: string;
+  tasks?: Task[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateCategoryDto {
+  name: string;
+  description?: string;
+  color?: string;
+}
+
+export interface UpdateCategoryDto {
+  name?: string;
+  description?: string;
+  color?: string;
+}
+
+// Serviços de categorias
+export const categoryService = {
+  getAll: () => {
+    return api.get<Category[]>('/categories');
+  },
+  getOne: (id: string) => {
+    return api.get<Category>(`/categories/${id}`);
+  },
+  create: (data: CreateCategoryDto) => {
+    return api.post<Category>('/categories', data);
+  },
+  update: (id: string, data: UpdateCategoryDto) => {
+    return api.patch<Category>(`/categories/${id}`, data);
+  },
+  delete: (id: string) => {
+    return api.delete(`/categories/${id}`);
+  },
+};
+
 // Serviços de tarefas
 export interface Task {
   id: string;
   title: string;
   description?: string;
   isCompleted: boolean;
+  isArchived: boolean;
   plannedDate?: string;
   completionDate?: string;
   userId: string;
+  categoryId?: string;
+  category?: Category;
   createdAt: string;
   updatedAt: string;
 }
@@ -64,6 +110,7 @@ export interface CreateTaskDto {
   description?: string;
   plannedDate?: string;
   isCompleted?: boolean;
+  categoryId?: string;
 }
 
 export interface UpdateTaskDto {
@@ -71,6 +118,7 @@ export interface UpdateTaskDto {
   description?: string;
   plannedDate?: string;
   isCompleted?: boolean;
+  categoryId?: string;
 }
 
 export interface TaskMetrics {
@@ -86,6 +134,9 @@ export const taskService = {
   getAll: () => {
     return api.get<Task[]>('/tasks');
   },
+  getArchived: () => {
+    return api.get<Task[]>('/tasks/archived');
+  },
   getOne: (id: string) => {
     return api.get<Task>(`/tasks/${id}`);
   },
@@ -97,6 +148,12 @@ export const taskService = {
   },
   delete: (id: string) => {
     return api.delete(`/tasks/${id}`);
+  },
+  archive: (id: string) => {
+    return api.patch<Task>(`/tasks/${id}/archive`);
+  },
+  unarchive: (id: string) => {
+    return api.patch<Task>(`/tasks/${id}/unarchive`);
   },
   getMetrics: () => {
     return api.get<TaskMetrics>('/tasks/metrics');
