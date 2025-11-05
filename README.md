@@ -281,14 +281,14 @@ Tema escuro para melhor experiência visual noturna
 
 ## 🚧 Próximas Funcionalidades
 
-- [ ] Categorias/Tags para tarefas
-- [ ] Filtros e ordenação avançada
-- [ ] Notificações de prazos
-- [ ] Anexos em tarefas
-- [ ] Compartilhamento de tarefas
-- [ ] Exportar dados (PDF, CSV)
-- [ ] Gráficos de produtividade
-- [ ] API de webhooks
+- [x] Categorias/Tags para tarefas
+- [] Filtros e ordenação avançada
+- [] Notificações de prazos
+- [] Anexos em tarefas
+- [] Compartilhamento de tarefas
+- [] Exportar dados (PDF, CSV)
+- [] Gráficos de produtividade
+- [] API de webhooks
 
 ## 👥 Contribuindo
 
@@ -297,11 +297,3 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull re
 ## 📄 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
-
-## 📧 Contato
-
-Para dúvidas ou sugestões, entre em contato através dos issues do projeto.
-
----
-
-**Desenvolvido com ❤️ usando as melhores práticas de desenvolvimento full-stack**
