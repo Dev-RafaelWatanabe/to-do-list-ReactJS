@@ -290,10 +290,6 @@ Tema escuro para melhor experiência visual noturna
 - [] Gráficos de produtividade
 - [] API de webhooks
 
-## 👥 Contribuindo
-
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
-
 ## 📄 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
