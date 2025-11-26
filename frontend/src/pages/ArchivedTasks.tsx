@@ -3,6 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { taskService, Task } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import {
+  FiArchive,
+  FiCornerUpLeft,
+  FiTrash2,
+  FiArrowLeft,
+  FiSun,
+  FiMoon,
+  FiUser,
+  FiLogOut,
+  FiFolder,
+} from 'react-icons/fi';
 
 export default function ArchivedTasks() {
   const navigate = useNavigate();
@@ -74,35 +85,41 @@ export default function ArchivedTasks() {
       <header className={`${isDark ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
-            <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              📦 Tarefas Concluídas
+            <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center gap-2`}>
+              <FiArchive className="w-6 h-6" /> Tarefas Concluídas
             </h1>
             <div className="flex gap-3">
               <button
                 onClick={toggleTheme}
-                className={`px-4 py-2 rounded-lg ${
+                className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
                   isDark ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 } transition-colors`}
               >
-                {isDark ? '☀️ Claro' : '🌙 Escuro'}
+                {isDark ? <><FiSun className="w-4 h-4" /> Claro</> : <><FiMoon className="w-4 h-4" /> Escuro</>}
               </button>
               <button
                 onClick={() => navigate('/dashboard')}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
               >
-                🏠 Dashboard
+                <FiArrowLeft className="w-4 h-4" /> Dashboard
               </button>
               <button
                 onClick={() => navigate('/categories')}
-                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors"
+                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors flex items-center gap-2"
               >
-                📁 Categorias
+                <FiFolder className="w-4 h-4" /> Categorias
+              </button>
+              <button
+                onClick={() => navigate('/profile')}
+                className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors flex items-center gap-2"
+              >
+                <FiUser className="w-4 h-4" /> Perfil
               </button>
               <button
                 onClick={handleLogout}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
               >
-                Sair
+                <FiLogOut className="w-4 h-4" /> Sair
               </button>
             </div>
           </div>
@@ -128,7 +145,7 @@ export default function ArchivedTasks() {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      ✅ {task.title}
+                      {task.title}
                     </h3>
                     {task.category && (
                       <span
@@ -165,15 +182,15 @@ export default function ArchivedTasks() {
                 <div className="flex flex-col gap-2 ml-4">
                   <button
                     onClick={() => handleUnarchive(task.id)}
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors whitespace-nowrap"
+                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors whitespace-nowrap flex items-center gap-2"
                   >
-                    ↩️ Recuperar
+                    <FiCornerUpLeft className="w-4 h-4" /> Recuperar
                   </button>
                   <button
                     onClick={() => handleDelete(task.id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
                   >
-                    🗑️ Excluir
+                    <FiTrash2 className="w-4 h-4" /> Excluir
                   </button>
                 </div>
               </div>

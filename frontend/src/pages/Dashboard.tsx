@@ -3,6 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { taskService, categoryService, Task, Category, CreateTaskDto, TaskMetrics } from '../services/api';
+import {
+  FiCheckSquare,
+  FiSquare,
+  FiEdit2,
+  FiTrash2,
+  FiPlus,
+  FiSun,
+  FiMoon,
+  FiFolder,
+  FiArchive,
+  FiUser,
+  FiLogOut,
+} from 'react-icons/fi';
 
 interface KanbanColumn {
   category: Category | null;
@@ -164,8 +177,9 @@ export default function Dashboard() {
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                📋 To-Do List - {user?.email}
+              <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'} flex items-center gap-2`}>
+                <FiCheckSquare className="w-6 h-6" />
+                To-Do List - {user?.email}
               </h1>
               {metrics && (
                 <div className={`mt-2 flex gap-4 text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
@@ -179,29 +193,35 @@ export default function Dashboard() {
             <div className="flex gap-3">
               <button
                 onClick={toggleTheme}
-                className={`px-4 py-2 rounded-lg ${
+                className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
                   isDark ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 } transition-colors`}
               >
-                {isDark ? '☀️ Claro' : '🌙 Escuro'}
+                {isDark ? <><FiSun className="w-4 h-4" /> Claro</> : <><FiMoon className="w-4 h-4" /> Escuro</>}
               </button>
               <button
                 onClick={() => navigate('/categories')}
-                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors"
+                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors flex items-center gap-2"
               >
-                📁 Categorias
+                <FiFolder className="w-4 h-4" /> Categorias
               </button>
               <button
                 onClick={() => navigate('/archived')}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
               >
-                📦 Arquivadas
+                <FiArchive className="w-4 h-4" /> Arquivadas
+              </button>
+              <button
+                onClick={() => navigate('/profile')}
+                className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors flex items-center gap-2"
+              >
+                <FiUser className="w-4 h-4" /> Perfil
               </button>
               <button
                 onClick={handleLogout}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
               >
-                Sair
+                <FiLogOut className="w-4 h-4" /> Sair
               </button>
             </div>
           </div>
@@ -213,9 +233,9 @@ export default function Dashboard() {
         <div className="mb-6">
           <button
             onClick={() => setShowModal(true)}
-            className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors font-semibold"
+            className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors font-semibold flex items-center gap-2"
           >
-            + Nova Tarefa
+            <FiPlus className="w-5 h-5" /> Nova Tarefa
           </button>
         </div>
 
@@ -261,12 +281,16 @@ export default function Dashboard() {
                     className={`${isDark ? 'bg-gray-700' : 'bg-white'} rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow`}
                   >
                     <div className="flex items-start gap-3">
-                      <input
-                        type="checkbox"
-                        checked={task.isCompleted}
-                        onChange={() => handleToggleComplete(task)}
-                        className="mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                      />
+                      <button
+                        onClick={() => handleToggleComplete(task)}
+                        className="mt-1 cursor-pointer text-blue-500 hover:text-blue-600 transition-colors"
+                      >
+                        {task.isCompleted ? (
+                          <FiCheckSquare className="h-5 w-5" />
+                        ) : (
+                          <FiSquare className="h-5 w-5" />
+                        )}
+                      </button>
                       <div className="flex-1 min-w-0">
                         <h3
                           className={`font-semibold ${
@@ -288,21 +312,21 @@ export default function Dashboard() {
                         )}
                         {task.plannedDate && (
                           <p className={`text-xs mt-2 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
-                            📅 {formatDate(task.plannedDate)}
+                            {formatDate(task.plannedDate)}
                           </p>
                         )}
                         <div className="flex gap-2 mt-3">
                           <button
                             onClick={() => handleEdit(task)}
-                            className="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
+                            className="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors flex items-center gap-1"
                           >
-                            ✏️ Editar
+                            <FiEdit2 className="w-3 h-3" /> Editar
                           </button>
                           <button
                             onClick={() => handleDelete(task.id)}
-                            className="text-xs bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors"
+                            className="text-xs bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors flex items-center gap-1"
                           >
-                            🗑️ Excluir
+                            <FiTrash2 className="w-3 h-3" /> Excluir
                           </button>
                         </div>
                       </div>
